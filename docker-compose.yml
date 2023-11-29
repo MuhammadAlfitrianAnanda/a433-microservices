@@ -1,0 +1,27 @@
+version: '2'
+
+services:
+  # Service untuk aplikasi item-app
+  item-app:
+    # Menggunakan Docker image item-app dari Docker Hub dengan tag v1.
+    image: alfi/item-app:v1
+    restart: always  # Selalu restart container jika terhenti secara tidak terduga.
+    ports:
+      # Melakukan port mapping agar aplikasi dapat diakses dari port 80 di host.
+      - "80:8080"
+    depends_on:
+      # Menentukan bahwa item-app hanya akan dijalankan setelah item-db diluncurkan.
+      - item-db
+
+  # Service untuk database item-db
+  item-db:
+    # Menggunakan Docker image mongo:3 dari Docker Hub.
+    image: mongo:3
+    restart: always  # Selalu restart container jika terhenti secara tidak terduga.
+    volumes:
+      # Menggunakan volume bernama app-db untuk menyimpan data database di dalam container.
+      - app-db:/data/db
+
+# Mendefinisikan volume app-db untuk item-db.
+volumes:
+  app-db:
